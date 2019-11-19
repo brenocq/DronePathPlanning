@@ -14,9 +14,9 @@ FLAGS = -lGL -lGLU -lglut
 
 all: ${BIN}drone-path
 
-${BIN}drone-path: ${OBJ}parameters.o ${OBJ}armPart.o ${OBJ}arm.o ${OBJ}geneticAlg.o ${OBJ}main.o
+${BIN}drone-path: ${OBJ}scene.o ${OBJ}block.o ${OBJ}parameters.o ${OBJ}armPart.o ${OBJ}arm.o ${OBJ}geneticAlg.o ${OBJ}main.o
 	@/bin/echo -e "${GREEN}${BOLD}----- Compiling object files -----${NC}"
-	g++ -g -o ${BIN}drone-path ${OBJ}main.o ${OBJ}geneticAlg.o ${OBJ}arm.o ${OBJ}armPart.o $(FLAGS)
+	g++ -g -o ${BIN}drone-path ${OBJ}main.o ${OBJ}geneticAlg.o ${OBJ}arm.o ${OBJ}armPart.o ${OBJ}scene.o ${OBJ}block.o $(FLAGS)
 
 ${OBJ}main.o: ${SRC}main.cpp
 	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}main.o ${SRC}main.cpp
@@ -33,6 +33,11 @@ ${OBJ}arm.o: ${SRC}arm.cpp
 ${OBJ}geneticAlg.o: ${SRC}geneticAlg.cpp
 	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}geneticAlg.o ${SRC}geneticAlg.cpp
 
+${OBJ}scene.o: ${SRC}scene.cpp
+	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}scene.o ${SRC}scene.cpp
+
+${OBJ}block.o: ${SRC}block.cpp
+	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}block.o ${SRC}block.cpp
 
 clean:
 	@/bin/echo -e "${GREEN}${BOLD}----- Cleaning project -----${NC}"

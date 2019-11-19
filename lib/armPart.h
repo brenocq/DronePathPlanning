@@ -10,13 +10,13 @@ public:
   ArmPart();
   ~ArmPart();
 
+  //--------- Getters and Setters ---------//
   void setPos(vector<float> pos);
   void setRot(vector<float> rot);
   void setSize(float h, float r);
   void setNumSides(float numSides);
   void setColor(vector<float> color);
   void draw();
-
 private:
   vector<float> _pos;
   vector<float> _rot;

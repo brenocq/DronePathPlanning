@@ -10,11 +10,13 @@
 #include <signal.h>
 
 #include "geneticAlg.h"
+#include "scene.h"
 
 using namespace std;
 
 //---------- Objects ----------//
 GeneticAlg *geneticAlg = new GeneticAlg();
+Scene *scene = new Scene();
 //---------- Definitions ----------//
 float viewAngleH = 0;
 float viewAngleV = 0;
@@ -79,6 +81,7 @@ void displayCallback(){
 	0.0f, 0.0f, 1.0f);
 
   geneticAlg->draw();
+  scene->draw();
 
 	glFlush();
   glutSwapBuffers();
@@ -104,12 +107,12 @@ void keyboardCallback(unsigned char key, int x, int y){
       closeProgram(2);
     break;
 
-    case 'd':
+    case 'a':
       viewAngleH-=5;
       viewAngleH = viewAngleH<0 ? 360+viewAngleH : viewAngleH;
     break;
 
-    case 'a':
+    case 'd':
       viewAngleH+=5;
       viewAngleH = viewAngleH>360 ? viewAngleH-360 : viewAngleH;
     break;

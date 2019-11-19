@@ -39,37 +39,18 @@ void ArmPart::setColor(vector<float> color){
 }
 
 void ArmPart::draw(){
-  glTranslatef(_pos[0], _pos[1], _pos[2]);
-  glRotatef(_rot[0], 1.0f, 0.0f, 0.0f);
-  glRotatef(_rot[1], 0.0f, 1.0f, 0.0f);
-  glRotatef(_rot[2], 0.0f, 0.0f, 1.0f);
-
-
-  // Cylinder Bottom
-  glBegin(GL_POLYGON);
-  glColor4f(_color[0], _color[1], _color[2], 1.0);
-  for(int i = 0; i <= 360 ; i += (360 / _numSides)) {
-    float a = i * M_PI / 180; // degrees to radians
-    glVertex3f(_radius * cos(a), _radius * sin(a), 0.0);
-  }
+  //---------- Draw line ----------//
+  glColor4f(_color[0], _color[1], _color[2], 1.0f);
+  glBegin(GL_LINES);
+  glVertex3f(_pos[0], _pos[1], _pos[2]);
+  glVertex3f(_pos[0]+_height*sin(_rot[0]*M_PI/180.f),
+             _pos[1]+_height*cos(_rot[1]*M_PI/180.f),
+             _pos[2]+_height*cos(_rot[2]*M_PI/180.f));
   glEnd();
-
-  // Cylinder Top
-  glBegin(GL_POLYGON);
-  glColor4f(_color[0], _color[1], _color[2], 1.0);
-  for(int i = 0; i <= 360; i += (360 / _numSides)) {
-    float a = i * M_PI / 180; // degrees to radians
-    glVertex3f(_radius * cos(a), _radius * sin(a), _height);
-  }
-  glEnd();
-
-  // Cylinder "Cover"
-  glBegin(GL_QUAD_STRIP);
-  glColor4f(_color[0], _color[1], _color[2], 1.0);
-  for(int i = 0; i < 480; i += (360 / _numSides)) {
-    float a = i * M_PI / 180; // degrees to radians
-    glVertex3f(_radius * cos(a), _radius * sin(a), 0.0);
-    glVertex3f(_radius * cos(a), _radius * sin(a), _height);
-  }
-  glEnd();
+  //---------- Draw Sphere ----------//
+  glPushMatrix();
+    glTranslatef(_pos[0], _pos[1], _pos[2]);
+    glColor4f(0.4f, 0.4f, 0.4f, 1.0f);
+    glutSolidSphere(_height/12,12, 12);
+  glPopMatrix();
 }

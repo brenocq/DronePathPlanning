@@ -17,11 +17,17 @@ Arm::Arm(){
     jointAngles[i].resize(3);
   }
 
+  float posX = 0.0f;
+  float posY = 0.0f;
+  float posZ = 0.0f;
   for(int i=0;i<int(_armParts.size());i++){
     _armParts[i] = new ArmPart();
-    _armParts[i]->setPos(vector<float>() = {0,0,PART_SIZE});
+    _armParts[i]->setPos(vector<float>() = {posX,posY,posZ});
     _armParts[i]->setRot(vector<float>() = {jointAngles[i][0],jointAngles[i][1],jointAngles[i][2]});
     _armParts[i]->setSize(PART_SIZE,PART_SIZE/32);
+    posX+=PART_SIZE*sin(jointAngles[i][0]*M_PI/180.f);
+    posY+=PART_SIZE*cos(jointAngles[i][1]*M_PI/180.f);
+    posZ+=PART_SIZE*cos(jointAngles[i][2]*M_PI/180.f);
   }
 }
 
@@ -31,12 +37,24 @@ Arm::~Arm(){
   }
 }
 
+void Arm::updateJoints(){
+  float posX = 0.0f;
+  float posY = 0.0f;
+  float posZ = 0.0f;
+  for(int i=0;i<int(_armParts.size());i++){
+    _armParts[i]->setPos(vector<float>() = {posX,posY,posZ});
+    _armParts[i]->setRot(vector<float>() = {jointAngles[i][0],jointAngles[i][1],jointAngles[i][2]});
+    _armParts[i]->setSize(PART_SIZE,PART_SIZE/32);
+    posX+=PART_SIZE*sin(jointAngles[i][0]*M_PI/180.f);
+    posY+=PART_SIZE*cos(jointAngles[i][1]*M_PI/180.f);
+    posZ+=PART_SIZE*cos(jointAngles[i][2]*M_PI/180.f);
+  }
+}
+
 void Arm::draw(){
   for(int i=0 ; i<int(_armParts.size()) ; i++){
     _armParts[i]->setRot(jointAngles[i]);
     _armParts[i]->draw();
-    glColor4f(0.7f, 0.7f,0.7f, 0.5f);
-    glutSolidSphere(PART_SIZE/10,32, 32);
   }
 }
 

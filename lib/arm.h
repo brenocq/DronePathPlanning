@@ -1,5 +1,5 @@
-#ifndef ARM
-#define ARM
+#ifndef ARM_H
+#define ARM_H
 #include <vector>
 #include "armPart.h"
 
@@ -11,6 +11,7 @@ public:
   ~Arm();
 
   void draw();
+  void updateJoints();
 
   //--------- Getters and Setters ---------//
   float getFitness();
@@ -24,4 +25,4 @@ public:
 };
 
 
-#endif// ARM
+#endif// ARM_H
