@@ -47,7 +47,7 @@ void ArmPart::draw(){
 
   // Cylinder Bottom
   glBegin(GL_POLYGON);
-  glColor4f(1.0, 0.0, 1.0, 1.0);
+  glColor4f(_color[0], _color[1], _color[2], 1.0);
   for(int i = 0; i <= 360 ; i += (360 / _numSides)) {
     float a = i * M_PI / 180; // degrees to radians
     glVertex3f(_radius * cos(a), _radius * sin(a), 0.0);
@@ -56,7 +56,7 @@ void ArmPart::draw(){
 
   // Cylinder Top
   glBegin(GL_POLYGON);
-  glColor4f(1.0, 0.0, 1.0, 1.0);
+  glColor4f(_color[0], _color[1], _color[2], 1.0);
   for(int i = 0; i <= 360; i += (360 / _numSides)) {
     float a = i * M_PI / 180; // degrees to radians
     glVertex3f(_radius * cos(a), _radius * sin(a), _height);
@@ -65,7 +65,7 @@ void ArmPart::draw(){
 
   // Cylinder "Cover"
   glBegin(GL_QUAD_STRIP);
-  glColor4f(1.0, 0.0, 1.0, 1.0);
+  glColor4f(_color[0], _color[1], _color[2], 1.0);
   for(int i = 0; i < 480; i += (360 / _numSides)) {
     float a = i * M_PI / 180; // degrees to radians
     glVertex3f(_radius * cos(a), _radius * sin(a), 0.0);

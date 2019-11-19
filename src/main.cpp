@@ -9,12 +9,12 @@
 #include <iostream>
 #include <signal.h>
 
-#include "arm.h"
+#include "geneticAlg.h"
 
 using namespace std;
 
 //---------- Objects ----------//
-Arm *arm = new Arm();
+GeneticAlg *geneticAlg = new GeneticAlg();
 //---------- Definitions ----------//
 float viewAngleH = 0;
 float viewAngleV = 0;
@@ -59,6 +59,12 @@ void configure(){
 	glClearDepth(1.0f);
 }
 
+void timerCallback(int value){
+  glutPostRedisplay();
+  geneticAlg->run();
+  glutTimerFunc(1000/60, timerCallback, 0);
+}
+
 void displayCallback(){
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
 	glLoadIdentity();
@@ -72,7 +78,7 @@ void displayCallback(){
 	0.0f, 0.0f, 0.0f+1.0f,
 	0.0f, 0.0f, 1.0f);
 
-  arm->draw();
+  geneticAlg->draw();
 
 	glFlush();
   glutSwapBuffers();
@@ -128,13 +134,9 @@ void keyboardCallback(unsigned char key, int x, int y){
   glutPostRedisplay();
 }
 
-void timerCallback(int value){
-  glutPostRedisplay();
-  glutTimerFunc(1000/60, timerCallback, 0);
-}
 
 void closeProgram(int signum){
   cout<<"\nClosing the program...\n";
-	delete arm;
+	delete geneticAlg;
   exit(signum);
 }

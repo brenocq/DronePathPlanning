@@ -12,9 +12,15 @@ public:
 
   void draw();
 
+  //--------- Getters and Setters ---------//
+  float getFitness();
+  void setFitness(float fitness);
 private:
+  float _fitness;
   vector<ArmPart*> _armParts;
-  vector<vector<float> >_jointAngles;
+
+public:
+  vector<vector<float> >jointAngles;
 };
 
 
