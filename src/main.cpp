@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <signal.h>
+#include <vector>
 
 #include "geneticAlg.h"
 #include "scene.h"
@@ -22,6 +23,8 @@ float viewAngleH = 0;
 float viewAngleV = 0;
 float viewDist = 3;
 
+vector<float> goal(3);
+
 //---------- Functions ----------//
 void closeProgram(int signum);// Free memory
 void configure();// Configure glut scene
@@ -34,6 +37,10 @@ void timerCallback(int value);
 
 int main(int argc, char** argv){
   signal(SIGINT, closeProgram);
+	goal[0]=1.5f;
+	goal[1]=0.0f;
+	goal[2]=1.0f;
+
 
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
@@ -63,6 +70,7 @@ void configure(){
 
 void timerCallback(int value){
   glutPostRedisplay();
+  geneticAlg->setGoal(goal);
   geneticAlg->run();
   glutTimerFunc(1000/60, timerCallback, 0);
 }
@@ -111,26 +119,41 @@ void keyboardCallback(unsigned char key, int x, int y){
       viewAngleH-=5;
       viewAngleH = viewAngleH<0 ? 360+viewAngleH : viewAngleH;
     break;
-
     case 'd':
       viewAngleH+=5;
       viewAngleH = viewAngleH>360 ? viewAngleH-360 : viewAngleH;
     break;
-
 		case 'w':
       viewAngleV+=viewAngleV<3 ? 0.1f : 0;
     break;
-
     case 's':
       viewAngleV-=viewAngleV>-3 ? 0.1f : 0;
     break;
-
     case 'e':
       viewDist-=viewDist>0.5f ? 0.1f : 0;
     break;
-
     case 'q':
       viewDist+=viewDist<10.0f ? 0.1f : 0;
+    break;
+
+
+    case 'i':
+      goal[0]-=0.1f;
+    break;
+    case 'k':
+      goal[0]+=0.1f;
+    break;
+    case 'j':
+      goal[1]-=0.1f;
+    break;
+    case 'l':
+      goal[1]+=0.1f;
+    break;
+    case 'o':
+      goal[2]+=0.1f;
+    break;
+    case 'u':
+      goal[2]-=0.1f;
     break;
   }
 

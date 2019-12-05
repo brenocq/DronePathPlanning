@@ -18,6 +18,7 @@ GeneticAlg::GeneticAlg(){
   }
   initializePop();
   srand(42);
+  _goal.resize(3);
 }
 
 GeneticAlg::~GeneticAlg(){
@@ -80,9 +81,9 @@ void GeneticAlg::genNewPop(){
 }
 
 void GeneticAlg::run(){
-  float goalX = -1.0f;
-  float goalY = 1.0f;
-  float goalZ = 1.0f;
+  float goalX = _goal[0];
+  float goalY = _goal[1];
+  float goalZ = _goal[2];
 
   // Calculate fitness
   int cont=0;
@@ -109,16 +110,38 @@ void GeneticAlg::run(){
 
 
 void GeneticAlg::draw(){
-  for(auto arm : _arms){
+  // Print only best arm
+  vector<pair<float, int> > bestArms;
+
+  bestArms.resize(SIZE_POP);
+  for (int i = 0; i < SIZE_POP; i++) {
+    bestArms[i] = make_pair(_arms[i]->getFitness(), i);
+  }
+  sort(bestArms.begin(), bestArms.end());
+
+  _arms[bestArms[0].second]->draw();
+
+  // Uncomment to see all arms
+  /*for(auto arm : _arms){
     glPushMatrix();
     arm->draw();
     glPopMatrix();
-  }
+  }*/
+
+  // Draw goal position
   glPushMatrix();
 
-  glTranslatef(-1.0f, 1.0f, 1.0f);
+  glTranslatef(_goal[0], _goal[1], _goal[2]);
   glColor4f(0.1f, 0.7f,0.1f, 1.0f);
-  glutSolidSphere(0.1f,32, 32);
+  glutSolidSphere(0.07f,32, 32);
 
   glPopMatrix();
+}
+
+//-------- Getters and Setters --------//
+void GeneticAlg::setGoal(vector<float> goal){
+  _goal = goal;
+}
+vector<float> GeneticAlg::getGoal() const{
+  return _goal;
 }
