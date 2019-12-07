@@ -17,8 +17,13 @@ public:
   void run();
   void draw();
 
+  //-------- Getters and Setters --------//
+  void setGoal(vector<float> goal);
+  vector<float> getGoal() const;
+
 private:
   vector<Arm*> _arms;
+  vector<float> _goal;
 };
 
 
