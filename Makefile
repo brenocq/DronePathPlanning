@@ -1,49 +1,59 @@
+CC = g++
 # Text style
 RED    = \033[0;31m
 GREEN  = \033[0;32m
 NC     = \033[0m
 BOLD   = \033[1m
 
+# Folders
+BIN	   = bin/
+SRC	   = src/
+SRCO   = src/opengl/
+LIB    = lib/
+LIBO   = lib/opengl/
+OBJ    = obj/
 
-BIN=bin/
-SRC=src/
-LIB=lib/
-OBJ=obj/
+# Files
+FILES-OPENGL = window camera material model mesh texture shader light directionalLight pointLight spotLight
+FILES = main
 
-FLAGS = -lGL -lGLU -lglut
+SOURCES=$(patsubst %, ${SRCO}%.cpp, ${FILES-OPENGL})
+SOURCES+=$(patsubst %, ${SRC}%.cpp, ${FILES})
 
-all: ${BIN}drone-path
+HEADERS=$(patsubst %, ${LIBO}%.h, ${FILES-OPENGL})
+HEADERS+=$(patsubst %, ${LIB}%.h, ${FILES})
 
-${BIN}drone-path: ${OBJ}scene.o ${OBJ}block.o ${OBJ}parameters.o ${OBJ}armPart.o ${OBJ}arm.o ${OBJ}geneticAlg.o ${OBJ}main.o
-	@/bin/echo -e "${GREEN}${BOLD}----- Compiling object files -----${NC}"
-	g++ -g -o ${BIN}drone-path ${OBJ}main.o ${OBJ}geneticAlg.o ${OBJ}arm.o ${OBJ}armPart.o ${OBJ}scene.o ${OBJ}block.o $(FLAGS)
+OBJECTS=$(patsubst %, ${OBJ}%.o, ${FILES-OPENGL})
+OBJECTS+=$(patsubst %, ${OBJ}%.o, ${FILES})
 
-${OBJ}main.o: ${SRC}main.cpp
-	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}main.o ${SRC}main.cpp
+DEPENDENCIES=${LIB}parameters.h
 
-${OBJ}parameters.o: ${LIB}parameters.h
-	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}parameters.o ${LIB}parameters.h
+EXECUTABLE=${BIN}droneSwarm
 
-${OBJ}armPart.o: ${SRC}armPart.cpp
-	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}armPart.o ${SRC}armPart.cpp
+# Flags
+FLAGS= -lGL -lGLU -lglfw -lGLEW -lassimp -Wall -I${LIBO} -I${LIB}
+export LD_LIBRARY_PATH=/usr/local/lib
 
-${OBJ}arm.o: ${SRC}arm.cpp
-	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}arm.o ${SRC}arm.cpp
+# Targets
+${EXECUTABLE}: ${OBJECTS} ${DEPENDENCIES}
+	@/bin/echo -e "${GREEN}${BOLD}----- Creating executable -----${NC}"
+	${CC} -g ${OBJECTS} -o ${EXECUTABLE} ${FLAGS} 
 
-${OBJ}geneticAlg.o: ${SRC}geneticAlg.cpp
-	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}geneticAlg.o ${SRC}geneticAlg.cpp
+# Compile OpenGL files
+${OBJ}%.o: ${SRCO}%.cpp
+	@/bin/echo -e "${GREEN}Compiling $<${NC}"
+	${CC} -c $< -o $@ ${FLAGS} 
 
-${OBJ}scene.o: ${SRC}scene.cpp
-	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}scene.o ${SRC}scene.cpp
-
-${OBJ}block.o: ${SRC}block.cpp
-	g++ -g -O0 -g3 -Wall -I${LIB} -c -o ${OBJ}block.o ${SRC}block.cpp
+# Compile project files
+${OBJ}%.o: ${SRC}%.cpp
+	@/bin/echo -e "${GREEN}Compiling $<${NC}"
+	${CC} -c $< -o $@ ${FLAGS} 
 
 clean:
 	@/bin/echo -e "${GREEN}${BOLD}----- Cleaning project -----${NC}"
-	@rm -rf ${OBJ}*.o
-	@rm -f ${BIN}drone-path
+	rm  ${OBJ}*.o
+	rm  ${EXECUTABLE}
 
-run: all
-	@/bin/echo -e "${GREEN}${BOLD}----- Running drone-path -----${NC}"
-	./${BIN}drone-path
+run: ${EXECUTABLE}
+	@/bin/echo -e "${GREEN}${BOLD}----- Running ${EXECUTABLE} -----${NC}"
+	./${EXECUTABLE}

@@ -1,7 +1,6 @@
-//----------- Arm parameters ----------//
-#define QTY_JOINTS 5
-#define PART_SIZE 0.5f
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
+const int MAX_POINT_LIGHTS = 3;
+const int MAX_SPOT_LIGHTS = 3;
 
-//----------- Genetic Alg parameters ----------//
-#define SIZE_POP 5
-#define MUTATION 0.1f
+#endif// PARAMETERS_H
